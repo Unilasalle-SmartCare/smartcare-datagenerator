@@ -9,3 +9,5 @@ Veja o progresso de interface gráfica, aplicação dos protótipos de design em
 
 ### Lançamentos
 Visando uma maior facilidade em juntar as features e fixes desenvolvidas no projeto, você pode ver os lançamentos(releases) [clicando aqui](https://github.com/rafaelfaustini/smartcare-frontend/releases).
+
+
