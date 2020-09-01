@@ -23,7 +23,8 @@ function draw() {
     var contador=0;
     for(let i = 0; i< dados.length; i++){
         element = dados[i]
-        if(dados[i].date == appVue.data){
+        if(dados[i].date == appVue.date){
+            dados[i].stress = appVue.estressado;
             chaves = dados.map(el => el.date)
             if(contador == 0){
                 fill(color(0, 255, 0))
@@ -47,13 +48,13 @@ function draw() {
 
 function doubleClicked() {
 
-    isDataNova = !dados.some(el => el.date == appVue.data)
+    isDataNova = !dados.some(el => el.date == appVue.date)
     if(isDataNova){
-        appVue.datas.push(appVue.data)
+        appVue.datas.push(appVue.date)
         appVue.datas.sort()
     }
     dados.push({
-        date: appVue.data,
+        date: appVue.date,
         x: mouseX,
         y: mouseY,
         stress: appVue.estressado || false
@@ -88,7 +89,7 @@ $("#date").change(function() {
         redraw()
         return new Date(b.date) - new Date(a.date)
     });
-    let a = dados.find(obj => obj.date === appVue.data)
+    let a = dados.find(obj => obj.date === appVue.date)
     if(a){
     appVue.estressado = a.stress
     }
