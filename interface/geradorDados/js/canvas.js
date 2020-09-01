@@ -2,17 +2,34 @@ dados = []
 function setup() {
     c = createCanvas(602, 369);
     c.parent("canvaswrapper") 
-    input = createFileInput(handleFile);
-    input.parent("fileWrapper")
+    inputFundo = createFileInput(handleImage);
+    inputFundo.addClass("d-block")
+    inputFundo.parent("fileWrapper");
+    inputJson = createFileInput(handleJSON);
+    inputJson.addClass("d-block")
+    inputJson.parent("jsonWrapper");
+
     img = loadImage("img/fundo.jpg");
   }
-img = null
-  function handleFile(file) {
+  img = null
+  function handleImage(file) {
     if (file.type === 'image') {
       img = loadImage(file.data);
-      console.log(img)
     } else {
       img = null;
+    }
+  }
+  function handleJSON(file){
+    if (file.type === 'application') {
+        json = JSON.parse(file.data);
+        dados = json;
+        datas = dados.filter((value, index, self) => {
+            return self.findIndex(v => v.date === value.date) === index;
+        })
+        for (i in datas){
+            appVue.datas.push(datas[i].date)
+        }
+        appVue.datas.sort()
     }
   }
   
@@ -91,6 +108,6 @@ $("#date").change(function() {
     });
     let a = dados.find(obj => obj.date === appVue.date)
     if(a){
-    appVue.estressado = a.stress
+        appVue.estressado = a.stress
     }
 });

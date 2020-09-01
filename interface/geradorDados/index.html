@@ -14,7 +14,6 @@
             <div class="col-md-3">
                 <label>Data</label>
                 <date-picker id="data" v-model="data" :config="{format: 'DD/MM/YYYY h:00'}"></date-picker>
-
             </div>
             <div class="col-md-1">
                 <label>Estressado</label>
@@ -32,8 +31,13 @@
             </div>
         </div> 
         <div class="row">
-            <div class="col-md-12" id="fileWrapper">
+            <div class="col-md-4 mx-3" id="fileWrapper">
 
+                <label>Carregar fundo</label>
+            </div>
+            <div class="col-md-4 mx-3" id="jsonWrapper">
+
+                <label>Carregar Dados</label>
             </div>
         </div>
     </div>

@@ -3,7 +3,7 @@ appVue = new Vue({
     data: {
         data: "",
         datas: [],
-        estressado: false
+        estressado: false,
     },
     mounted(){
     },
