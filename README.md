@@ -5,6 +5,9 @@
 Veja o progresso de design, como protótipos de média fidelidade [clicando aqui](https://github.com/Unilasalle-SmartCare/smartcare-frontend/tree/master/prototipagem)
 
 ## Interface Gráfica
+Veja o progresso de interface gráfica, aplicação dos protótipos de design em código front-end [clicando aqui](https://github.com/rafaelfaustini/smartcare-frontend/tree/master/interface)  
+#### Gerador de dados
+Uma interface feita não para o usuário diretamente mas para durante desenvolvimento simular dados reais para o módulo de machine learning
 Veja o progresso de interface gráfica, aplicação dos protótipos de design em código front-end [clicando aqui](https://github.com/Unilasalle-SmartCare/smartcare-frontend/tree/master/interface)  
 
 ### Lançamentos
