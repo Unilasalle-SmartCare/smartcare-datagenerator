@@ -16,17 +16,20 @@
                 <label class="noselect">Data</label>
                 <date-picker id="data" v-model="data" :config="config"></date-picker>
             </div>
-            <div class="col-md-1">
-                <label class="noselect">Estressado</label>
+            <div class="col-md-3">
+                <label class="noselect text-center">Estressado</label>
                 <input v-model="estressado" type="checkbox" class="form-control"/>
+            </div>
+            <div class="col-md-3">
+                <label class="noselect" v-show="qtdRegistros">{{qtdRegistros}} registros - {{qtdStress}} stress e {{qtdNormal}} atividade normal</label>
             </div>
         </div>  
         <div class="row">
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-md-2" v-for="d in datas">
-                        <span v-if="d==data"class="badge tag active mx-1" @click="data=d">{{d}}</span>
-                        <span v-else class="badge tag mx-1" @click="data=d">{{d}}</span>
+                        <span v-if="d==data"class="badge tag active mx-2" @click="data=d">{{d}}</span>
+                        <span v-else class="badge tag mx-2" @click="data=d">{{d}}</span>
                     </div>
                 </div>
             </div>

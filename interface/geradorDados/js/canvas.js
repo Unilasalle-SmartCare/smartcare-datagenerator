@@ -32,6 +32,14 @@ function setup() {
                 appVue.datas.push(datas[i].date)
             }
             appVue.datas.sort()
+            for(i in dados){
+                appVue.qtdRegistros++
+                if(dados[i].stress){
+                    appVue.qtdStress++
+                } else {
+                    appVue.qtdNormal++ 
+                }
+            }
         }
       } catch (error) {
           console.log(error)
@@ -85,15 +93,20 @@ function adicionaPonto(data, x, y, stress){
         stress: stress || false
     })
   dados =  _.sortBy(dados, 'date');
+  appVue.qtdRegistros++
+  if(stress){
+    appVue.qtdStress++
+  } else {
+    appVue.qtdNormal++ 
+  }
 }
 
 function doubleClicked() {
     let stress = appVue.estressado
-    //console.log(get(mouseX, mouseY, 10, 10))
     if(appVue.date && mouseX && mouseY && typeof stress === "boolean") {
         isDataNova = !dados.some(el => el.date == appVue.date)
         if(isDataNova){
-            appVue.datas.push(appVue.data)
+            appVue.datas.push(appVue.date)
             appVue.datas.sort()
         }
         adicionaPonto(appVue.date, mouseX, mouseY, stress)
@@ -108,9 +121,6 @@ function doubleClicked() {
 
 function keyPressed() {
     switch(keyCode){
-        case ENTER:
-            salvarDados();
-            break;
         case BACKSPACE:
             swal({
                 title: "Tem certeza?",

@@ -6,18 +6,19 @@ appVue = new Vue({
         estressado: false,
         config: {
             format: 'DD/MM/YYYY HH:00'
-        }
-    },
-    mounted(){
+        },
+        qtdRegistros: 0,
+        qtdStress: 0,
+        qtdNormal: 0
     },
     computed: {
         date(){
-                let date = moment(this.data, "DD/MM/YYYY HH:00")
+                let date = moment(this.data, "DD/MM/YYYY HH:00");
                 if(date.isValid()){
                     return date.format("DD/MM/YYYY HH:00")
                 } else{
                     return null
                 }
-        }
-    }
+        },
+    },
   })
