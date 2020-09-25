@@ -1,13 +1,22 @@
 dados = []
 img = null
+Array.prototype.unique = function() {
+    return this.filter(function (value, index, self) {
+      return self.indexOf(value) === index;
+    });
+  };
 function setup() {
+    
     c = createCanvas(602, 369);
     c.parent("canvaswrapper") 
+    c.doubleClicked(doubleClick)
     inputFundo = createFileInput(handleImage);
-    inputFundo.addClass("d-block")
+    inputFundo.id("fileInputImg")
+    inputFundo.addClass("inputfile")
     inputFundo.parent("fileWrapper");
     inputJson = createFileInput(handleJSON);
-    inputJson.addClass("d-block")
+    inputJson.id("fileInputJson")
+    inputJson.addClass("inputfile")
     inputJson.parent("jsonWrapper");
 
     img = loadImage("img/fundo.jpg");
@@ -40,6 +49,11 @@ function setup() {
                     appVue.qtdNormal++ 
                 }
             }
+            appVue.mediaPontos = (appVue.qtdRegistros / dados.map(x => x.date).unique().length).toFixed(2)
+            let pontos = _.countBy(dados, 'date');
+            appVue.minPontos = _.minBy(_.entries(pontos), 1)[1]
+            appVue.maxPontos = _.maxBy(_.entries(pontos), 1)[1]
+
         }
       } catch (error) {
           console.log(error)
@@ -94,14 +108,23 @@ function adicionaPonto(data, x, y, stress){
     })
   dados =  _.sortBy(dados, 'date');
   appVue.qtdRegistros++
-  if(stress){
-    appVue.qtdStress++
-  } else {
-    appVue.qtdNormal++ 
+  appVue.mediaPontos = (appVue.qtdRegistros / dados.map(x => x.date).unique().length).toFixed(2)
+  let pontos = _.countBy(dados, 'date');
+  appVue.minPontos = _.minBy(_.entries(pontos), 1)[1]
+  appVue.maxPontos = _.maxBy(_.entries(pontos), 1)[1]
+
+  appVue.qtdStress = 0;
+  appVue.qtdNormal = 0
+  for(i in dados){
+    if(dados[i].stress){
+        appVue.qtdStress++
+    } else {
+        appVue.qtdNormal++ 
+    }
   }
 }
 
-function doubleClicked() {
+function doubleClick() {
     let stress = appVue.estressado
     if(appVue.date && mouseX && mouseY && typeof stress === "boolean") {
         isDataNova = !dados.some(el => el.date == appVue.date)

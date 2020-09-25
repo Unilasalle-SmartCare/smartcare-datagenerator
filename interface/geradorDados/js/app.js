@@ -9,7 +9,11 @@ appVue = new Vue({
         },
         qtdRegistros: 0,
         qtdStress: 0,
-        qtdNormal: 0
+        qtdNormal: 0,
+        mediaPontos: 0,
+        minPontos: 0,
+        maxPontos: 0,
+        mostraDatas: false
     },
     computed: {
         date(){
