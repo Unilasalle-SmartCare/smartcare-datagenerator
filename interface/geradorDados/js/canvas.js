@@ -114,14 +114,33 @@ function adicionaPonto(data, x, y, stress){
   appVue.maxPontos = _.maxBy(_.entries(pontos), 1)[1]
 
   appVue.qtdStress = 0;
-  appVue.qtdNormal = 0
+  appVue.qtdNormal = 0;
+  appVue.estatisticaAtual.qtdStress = 0;
+  appVue.estatisticaAtual.qtdNormal = 0;
+  appVue.estatisticaAtual.qtdNormal = 0;
+
+
   for(i in dados){
+    if(!isNaN(parseInt(i))){
     if(dados[i].stress){
         appVue.qtdStress++
+        if(dados[i].date == appVue.data){
+            appVue.estatisticaAtual.qtdStress++
+        }
     } else {
+        
         appVue.qtdNormal++ 
+        if(dados[i].date == appVue.data){
+           appVue.estatisticaAtual.qtdNormal++ 
+        }
+    }
     }
   }
+
+  var estatisticaAtualPontos = _.filter(dados, function(o) {
+    if (o.date === appVue.data) return o;
+});
+  appVue.estatisticaAtual.qtdRegistros = estatisticaAtualPontos.length || 0;
 }
 
 function doubleClick() {
@@ -172,14 +191,6 @@ function salvarDados(){
     json = JSON.stringify(dados);
     saveJSON(JSON.stringify(dados), 'dados.json');
 }
-
-$("#date").change(function() {
-    dados = _.sortBy(dados, 'date');
-    let a = dados.find(obj => obj.date === appVue.date)
-    if(a){
-        appVue.estressado = a.stress
-    }
-});
 
 $(document).on('keydown', function(e){
     if(e.ctrlKey && e.which === 83){

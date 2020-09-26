@@ -20,7 +20,7 @@
                 <div class="row my-2">
                     <div class="col-md-3">
                         <label class="noselect">Data</label>
-                        <date-picker id="data" v-model="data" :config="config"></date-picker>
+                        <date-picker id="data" v-model="data" :config="config" @dp-change="onTrocaData()"></date-picker>
                     </div>
                     <div class="col-md-2">
                         <label class="noselect text-center">Estressado</label>
@@ -64,14 +64,14 @@
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="col-md-12" v-show="!qtdRegistros && !qtdStress && !qtdNormal && !minPontos && !mediaPontos && !maxPontos">
+                <div class="col-md-12" v-show="!qtdRegistros">
                     <md-empty-state v-show="!qtdRegistros && !qtdStress && !qtdNormal"
                     md-icon="analytics"
                     md-label="Sem estatísticas"
                     md-description="Duplo clique na planta da casa e comece a indicar os caminhos percorridos.">
                     </md-empty-state>
                 </div>
-                <div class="col-md-12" v-show="qtdRegistros || qtdStress || qtdNormal || minPontos || mediaPontos || maxPontos">
+                <div class="col-md-12" v-show="qtdRegistros">
                     <p class="font-weight-bold"><md-icon class="md-size-2x">show_chart</md-icon> Estatísticas Gerais</p>
                         <div class="row" v-show="qtdRegistros || qtdStress || qtdNormal">
                             <div class="col-md-3">
@@ -144,8 +144,43 @@
                             </div>
                         </div>
                 </div>
-                <div class="col-md-12 mt-5" v-show="1==2">
-                    <p class="font-weight-bold">Estatísticas <span class="text-primary">{{data}}</span></p>
+                <div class="col-md-12 mt-5" v-show="estatisticaAtual.qtdRegistros">
+                    <p class="font-weight-bold">Estatísticas de <span class="text-primary">{{data}}</span></p>
+                    <div class="row" v-show="estatisticaAtual.qtdRegistros">
+                        <div class="col-md-3">
+                            <div class="card bg-complementary text-white">
+                                <div class="card-body">
+                                    <transition name="bounce" mode="out-in">
+                                        <p class="text-center unidades f2" :key="estatisticaAtual.qtdStress">{{estatisticaAtual.qtdStress || 0}}</p>
+                                    </transition>
+                                    <p class="text-left font-weight-light m-0 f7">Pontos</p>
+                                    <p class="text-left m-0 f8">Stress</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <transition name="bounce" mode="out-in">
+                                        <p class="text-center unidades f2" :key="estatisticaAtual.qtdRegistros">{{estatisticaAtual.qtdRegistros || 0}}</p>
+                                    </transition>
+                                    <p class="text-left font-weight-light m-0 f6">Pontos</p>
+                                    <p class="text-left m-0 f8">Totais</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-secondary text-white">
+                                <div class="card-body">
+                                    <transition name="bounce" mode="out-in">
+                                        <p class="text-center unidades f2" :key="estatisticaAtual.qtdNormal">{{estatisticaAtual.qtdNormal || 0}}</p>
+                                    </transition>    
+                                    <p class="text-left font-weight-light m-0 f7">Pontos</p>
+                                    <p class="text-left m-0 f8">Atividade normal</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
