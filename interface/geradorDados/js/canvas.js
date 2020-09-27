@@ -54,7 +54,14 @@ function setup() {
             appVue.minPontos = _.minBy(_.entries(pontos), 1)[1]
             appVue.maxPontos = _.maxBy(_.entries(pontos), 1)[1]
 
-        }
+            appVue.estatisticaHora.qtdStress = _.filter(_.uniqBy(dados, 'date'), function(o) {
+                if (o.stress === true) return o;
+            }).length;
+            appVue.estatisticaHora.qtdNormal = _.filter(_.uniqBy(dados, 'date'), function(o) {
+                if (o.stress === false) return o;
+            }).length;
+            appVue.estatisticaHora.qtdHoras = _.uniqBy(dados, 'date').length;
+           }
       } catch (error) {
           console.log(error)
       }
@@ -68,18 +75,28 @@ function drawCaminho(){
             if(dados[i].date == appVue.date){
                 dados[i].stress = appVue.estressado;
                 chaves = dados.map(el => el.date)
+                
                 if(contador == 0){
-                    fill(color(0, 255, 0))
+                    strokeWeight(1.5);
+                    stroke(27,94,32);
+                    fill(color(205,220,57))
                 } else if (i >= chaves.lastIndexOf(dados[i].date)){
-                    fill(color(255, 0, 0))
+                    strokeWeight(1.5);
+                    stroke(213,0,0);
+                    fill(color(244,67,54))
                 } else {
-                    fill(color(255, 204, 0));
+                    strokeWeight(1.5);
+                    stroke(230,81,0);
+                    fill(color(255,238,88));
                 }
-            circle(element.x, element.y, 10, 10) 
-    
+                
+            circle(element.x, element.y, 12, 12) 
+            strokeWeight(1);
+            stroke(0);
             if(i+1 < dados.length && dados[i].date == dados[i+1].date){
+                strokeWeight(2);
                 line(element.x, element.y, dados[i+1].x, dados[i+1].y);
-                fill(color(0, 0, 0));
+                fill(color(38,50,56));
             }
             contador+=1
             } else{
@@ -117,7 +134,7 @@ function adicionaPonto(data, x, y, stress){
   appVue.qtdNormal = 0;
   appVue.estatisticaAtual.qtdStress = 0;
   appVue.estatisticaAtual.qtdNormal = 0;
-  appVue.estatisticaAtual.qtdNormal = 0;
+  appVue.estatisticaAtual.qtdRegistros = 0;
 
 
   for(i in dados){
@@ -141,6 +158,16 @@ function adicionaPonto(data, x, y, stress){
     if (o.date === appVue.data) return o;
 });
   appVue.estatisticaAtual.qtdRegistros = estatisticaAtualPontos.length || 0;
+
+  
+  appVue.estatisticaHora.qtdStress = _.filter(_.uniqBy(dados, 'date'), function(o) {
+    if (o.stress === true) return o;
+}).length;
+appVue.estatisticaHora.qtdNormal = _.filter(_.uniqBy(dados, 'date'), function(o) {
+    if (o.stress === false) return o;
+}).length;
+appVue.estatisticaHora.qtdHoras = _.uniqBy(dados, 'date').length;
+
 }
 
 function doubleClick() {
@@ -177,6 +204,12 @@ function keyPressed() {
                     icon: "success",
                   });
                   dados = [];
+                  appVue.qtdRegistros = 0;
+                  appVue.qtdStress = 0;
+                  appVue.qtdNormal = 0;
+                  appVue.estatisticaAtual.qtdStress = 0;
+                  appVue.estatisticaAtual.qtdNormal = 0;
+                  appVue.estatisticaAtual.qtdRegistros = 0;
                 } else {
                     return;
                 }

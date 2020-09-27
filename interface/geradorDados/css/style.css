@@ -1,5 +1,6 @@
 body {
     font-family: 'Roboto';font-size: 1em;
+    overflow-x: hidden;
 }
 
 .tag{
