@@ -1,0 +1,88 @@
+body {
+    font-family: 'Roboto';font-size: 1em;
+    overflow-x: hidden;
+}
+
+.tag{
+    background-color: #6c757d;
+    transition: all 0.5s ease-out;
+    cursor: pointer;
+}
+.tag:hover{
+    background-color: #314aa7;
+}
+.active{
+    background-color: #516feb;
+    color: white;
+}
+.noselect {
+    -webkit-touch-callout: none;
+      -webkit-user-select: none;
+       -khtml-user-select: none;
+         -moz-user-select: none;
+          -ms-user-select: none;
+              user-select: none;
+                                 
+  }
+
+  .card, .card-header{
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.05);
+  
+}
+
+  .f1 { font-size: 36px; }
+  .f2 { font-size: 30px; }
+  .f3 { font-size: 24px; }
+  .f4 { font-size: 21px; }
+  .f5 { font-size: 18px; }
+  .f6 { font-size: 16px; }
+  .f7 { font-size: 14px; }
+  .f8 { font-size: 12px; }
+  .f9 { font-size: 10px; }
+
+  .unidades {
+      font-weight: 200;
+  }
+  
+.bg-primary{
+    background-color: #516feb !important;
+  }
+.text-primary{
+    color: #516feb !important;
+}
+.bg-secondary{
+    background-color: #ff8903 !important;
+}
+.bg-complementary{
+    background-color: #ff2c55 !important;
+}
+
+.bounce-enter-active {
+    animation: bounce-in .5s;
+  }
+  .bounce-leave-active {
+    animation: bounce-in .5s reverse;
+  }
+  @keyframes bounce-in {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.5);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  [v-cloak] {
+    display: none;
+    }
+    .inputfile {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+    }
