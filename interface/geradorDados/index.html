@@ -16,7 +16,7 @@
 		<div id="appVue" v-cloak>
 			<md-app md-waterfall md-mode="fixed">
 				<md-app-toolbar class="md-primary">
-					<span class="md-title">Smartcare - Gerador de dados</span>
+					<span class="md-title">Smartcare - Data Generator</span>
 					<div class="md-toolbar-section-end">
 						<md-menu md-size="auto" md-align-trigger>
 							<md-badge md-position="bottom" :md-content="datas.length" md-menu-trigger>
@@ -26,12 +26,12 @@
 							</md-badge>
 							<md-menu-content class="md-scrollbar">
 								<md-list>
-									<md-subheader>Data Atual</md-subheader>
+									<md-subheader>Current Date</md-subheader>
 									<md-list-item>
 										<md-chip class="md-accent" md-clickable>{{data}}</md-chip>
 									</md-list-item>
 									<md-divider v-show="datasOrdenadas().length"></md-divider>
-									<md-subheader v-show="datasOrdenadas().length">Datas cadastradas</md-subheader>
+									<md-subheader v-show="datasOrdenadas().length">Registered dates</md-subheader>
 									<md-list-item v-for="d in datasOrdenadas()">
 										<md-chip v-if="d" class="md-primary" @click="data=d" md-clickable><span v-show="checkStress(d) == 1">🙂 - </span><span v-show="checkStress(d) == 0">😕 - </span>{{d}}</md-chip>
 									</md-list-item>
@@ -45,11 +45,11 @@
 				<div class="col-md-6">
 					<div class="row my-2">
 						<div class="col-md-3 col-sm-6 col-xs-12">
-							<label class="noselect">Data</label>
+							<label class="noselect">Date</label>
 							<date-picker id="data" v-model="data" :config="config" @dp-change="onTrocaData()"></date-picker>
 						</div>
 						<div class="col-md-3 col-sm-6 col-xs-12">
-							<md-switch class="mt-3"  v-model="estressado" @change="setStress()">Estressado <span v-show="!estressado">🙂</span><span v-show="estressado">😕</span></md-switch>
+							<md-switch class="mt-3"  v-model="estressado" @change="setStress()">Wandering <span v-show="!estressado">🙂</span><span v-show="estressado">😕</span></md-switch>
 						</div>
 						<div class="col-md-1" v-show="0==1">
 							<md-button v-if="!mostraDatas" class="md-icon-button  md-raised md-accent" @click="mostraDatas = true">
@@ -78,10 +78,10 @@
 					</div>
 					<div class="row mt-3">
 						<div class="col-md-3 col-sm-6 col-xs-12" id="fileWrapper" v-show="1==0">
-							<label for="fileInputImg" class="btn btn-primary btn-block">Carregar Fundo</label>
+							<label for="fileInputImg" class="btn btn-primary btn-block">Load Background</label>
 						</div>
 						<div class="col-md-3 col-sm-6 col-xs-12" id="jsonWrapper" v-show="1==0">
-							<label for="fileInputJson" class="btn btn-primary btn-block">Carregar Dados</label>
+							<label for="fileInputJson" class="btn btn-primary btn-block">Load Data</label>
 						</div>
 					</div>
 				</div>
@@ -89,14 +89,14 @@
 					<div class="col-md-12" v-show="!qtdRegistros">
 						<md-empty-state v-show="!qtdRegistros && !qtdStress && !qtdNormal"
 							md-icon="analytics"
-							md-label="Sem estatísticas"
-							md-description="Duplo clique na planta da casa e comece a indicar os caminhos percorridos.">
+							md-label="No data available"
+							md-description="We do not have data available to generate the statistics. Double click the floor plan and start tracing the paths.">
 						</md-empty-state>
 					</div>
 					<div class="col-md-12" v-show="qtdRegistros">
 						<p class="font-weight-bold noselect">
 							<md-icon class="md-size-2x">show_chart</md-icon>
-							Estatísticas Gerais
+							Global Statistics
 						</p>
 						<div class="row" v-show="qtdRegistros || qtdStress || qtdNormal">
 							<div class="col-md-3">
@@ -105,8 +105,8 @@
 										<transition name="bounce" mode="out-in">
 											<p class="text-center unidades f2" :key="qtdStress">{{qtdStress || 0}}</p>
 										</transition>
-										<p class="text-left font-weight-light m-0 f7">Pontos</p>
-										<p class="text-left m-0 f8">Stress</p>
+										<p class="text-left font-weight-light m-0 f7">Wandering</p>
+										<p class="text-left m-0 f8">Points</p>
 									</div>
 								</div>
 							</div>
@@ -116,8 +116,8 @@
 										<transition name="bounce" mode="out-in">
 											<p class="text-center unidades f2" :key="qtdRegistros">{{qtdRegistros || 0}}</p>
 										</transition>
-										<p class="text-left font-weight-light m-0 f6">Pontos</p>
-										<p class="text-left m-0 f8">Totais</p>
+										<p class="text-left font-weight-light m-0 f6">Total</p>
+										<p class="text-left m-0 f8">Points</p>
 									</div>
 								</div>
 							</div>
@@ -127,8 +127,8 @@
 										<transition name="bounce" mode="out-in">
 											<p class="text-center unidades f2" :key="qtdNormal">{{qtdNormal || 0}}</p>
 										</transition>
-										<p class="text-left font-weight-light m-0 f7">Pontos</p>
-										<p class="text-left m-0 f8">Atividade normal</p>
+										<p class="text-left font-weight-light m-0 f7">Normal Activity</p>
+										<p class="text-left m-0 f8">Points</p>
 									</div>
 								</div>
 							</div>
@@ -140,8 +140,8 @@
 										<transition name="bounce" mode="out-in">
 											<p class="text-center unidades f2" :key="minPontos">{{minPontos}}</p>
 										</transition>
-										<p class="text-left font-weight-light m-0 f6">Mínimo pontos</p>
-										<p class="text-left m-0 f8">Por data</p>
+										<p class="text-left font-weight-light m-0 f6">Minimum Points</p>
+										<p class="text-left m-0 f8">Per date</p>
 									</div>
 								</div>
 							</div>
@@ -151,8 +151,8 @@
 										<transition name="bounce" mode="out-in">
 											<p class="text-center unidades f2" :key="mediaPontos">{{mediaPontos || 0}}</p>
 										</transition>
-										<p class="text-left font-weight-light m-0 f6">Média pontos</p>
-										<p class="text-left m-0 f8">Por data</p>
+										<p class="text-left font-weight-light m-0 f6">Average Points</p>
+										<p class="text-left m-0 f8">Per date</p>
 									</div>
 								</div>
 							</div>
@@ -162,8 +162,8 @@
 										<transition name="bounce" mode="out-in">
 											<p class="text-center unidades f2" :key="maxPontos">{{maxPontos || 0}}</p>
 										</transition>
-										<p class="text-left font-weight-light m-0 f6">Máximo pontos</p>
-										<p class="text-left m-0 f8">Por data</p>
+										<p class="text-left font-weight-light m-0 f6">Maximum Points</p>
+										<p class="text-left m-0 f8">Per date</p>
 									</div>
 								</div>
 							</div>
@@ -175,8 +175,8 @@
 										<transition name="bounce" mode="out-in">
 											<p class="text-center unidades f2" :key="estatisticaHora.qtdStress">{{estatisticaHora.qtdStress || 0}}</p>
 										</transition>
-										<p class="text-left font-weight-light m-0 f7">Horas</p>
-										<p class="text-left m-0 f8">De stress</p>
+										<p class="text-left font-weight-light m-0 f7">Wandering</p>
+										<p class="text-left m-0 f8">Hours</p>
 									</div>
 								</div>
 							</div>
@@ -186,8 +186,8 @@
 										<transition name="bounce" mode="out-in">
 											<p class="text-center unidades f2" :key="estatisticaHora.qtdHoras">{{estatisticaHora.qtdHoras || 0}}</p>
 										</transition>
-										<p class="text-left font-weight-light m-0 f6">Horas</p>
-										<p class="text-left m-0 f8">Totais</p>
+										<p class="text-left font-weight-light m-0 f6">Total</p>
+										<p class="text-left m-0 f8">Hours</p>
 									</div>
 								</div>
 							</div>
@@ -197,15 +197,15 @@
 										<transition name="bounce" mode="out-in">
 											<p class="text-center unidades f2" :key="estatisticaHora.qtdNormal">{{estatisticaHora.qtdNormal || 0}}</p>
 										</transition>
-										<p class="text-left font-weight-light m-0 f7">Horas</p>
-										<p class="text-left m-0 f8">De atividade normal</p>
+										<p class="text-left font-weight-light m-0 f7">Normal Activity</p>
+										<p class="text-left m-0 f8">Hours</p>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="col-md-12 mt-5" v-show="estatisticaAtual.qtdRegistros">
-						<p class="font-weight-bold">Estatísticas de <span class="text-primary">{{data}}</span></p>
+						<p class="font-weight-bold"><span class="text-primary">{{data}}</span> Statistics </p>
 						<div class="row" v-show="estatisticaAtual.qtdRegistros">
 							<div class="col-md-3">
 								<div class="card bg-complementary text-white">
@@ -213,8 +213,8 @@
 										<transition name="bounce" mode="out-in">
 											<p class="text-center unidades f2" :key="estatisticaAtual.qtdStress">{{estatisticaAtual.qtdStress || 0}}</p>
 										</transition>
-										<p class="text-left font-weight-light m-0 f7">Pontos</p>
-										<p class="text-left m-0 f8">Stress</p>
+										<p class="text-left font-weight-light m-0 f7">Wandering</p>
+										<p class="text-left m-0 f8">Points</p>
 									</div>
 								</div>
 							</div>
@@ -224,8 +224,8 @@
 										<transition name="bounce" mode="out-in">
 											<p class="text-center unidades f2" :key="estatisticaAtual.qtdRegistros">{{estatisticaAtual.qtdRegistros || 0}}</p>
 										</transition>
-										<p class="text-left font-weight-light m-0 f6">Pontos</p>
-										<p class="text-left m-0 f8">Totais</p>
+										<p class="text-left font-weight-light m-0 f6">Total</p>
+										<p class="text-left m-0 f8">Points</p>
 									</div>
 								</div>
 							</div>
@@ -235,8 +235,8 @@
 										<transition name="bounce" mode="out-in">
 											<p class="text-center unidades f2" :key="estatisticaAtual.qtdNormal">{{estatisticaAtual.qtdNormal || 0}}</p>
 										</transition>
-										<p class="text-left font-weight-light m-0 f7">Pontos</p>
-										<p class="text-left m-0 f8">Atividade normal</p>
+										<p class="text-left font-weight-light m-0 f7">Normal activity</p>
+										<p class="text-left m-0 f8">Points</p>
 									</div>
 								</div>
 							</div>
@@ -254,19 +254,19 @@
 			<md-speed-dial-content>
 				<md-button class="md-icon-button" @click="uploadFundo()">
 					<md-icon>perm_media</md-icon>
-					<md-tooltip md-direction="right">Carregar imagem da planta baixa</md-tooltip>
+					<md-tooltip md-direction="right">Upload the floor plan image</md-tooltip>
 				</md-button>
 				<md-button class="md-icon-button" @click="deletarDados()">
 					<md-icon>backspace</md-icon>
-					<md-tooltip md-direction="right">Deletar todos os dados</md-tooltip>
+					<md-tooltip md-direction="right">Delete all the data</md-tooltip>
 				</md-button>
 				<md-button class="md-icon-button" @click="uploadJson">
 					<md-icon>folder</md-icon>
-					<md-tooltip md-direction="right">Carregar dados salvos</md-tooltip>
+					<md-tooltip md-direction="right">Load data</md-tooltip>
 				</md-button>
 				<md-button class="md-icon-button" @click="save()">
 					<md-icon>save_alt</md-icon>
-					<md-tooltip md-direction="right">Salvar dados</md-tooltip>
+					<md-tooltip md-direction="right">Save data</md-tooltip>
 				</md-button>
 			</md-speed-dial-content>
 		</div>

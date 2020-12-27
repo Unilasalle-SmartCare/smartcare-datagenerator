@@ -133,7 +133,7 @@ appVue = new Vue({
                             if (dados) {
                                 dados = _.sortBy(dados, 'date');
                                 json = JSON.stringify(dados);
-                                saveJSON(JSON.stringify(dados), 'dados.json');
+                                saveJSON(JSON.stringify(dados), `dados-${new Date().getTime()}.json`);
                             }
                             swal("Pronto! O arquivo foi salvo com sucesso", {
                                 icon: "success",
@@ -145,7 +145,7 @@ appVue = new Vue({
                 e.preventDefault();
                 return false;
             } catch (error) {
-                this.geraErro(erro)
+                this.geraErro(error)
             }
         },
         uploadFundo() {

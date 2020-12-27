@@ -206,36 +206,8 @@ function doubleClick() {
     return false;
 }
 
-function salvarDados() {
-    try {
-        dados = _.sortBy(dados, 'date');
-        json = JSON.stringify(dados);
-        saveJSON(JSON.stringify(dados), 'dados.json');
-    } catch (error) {
-        appVue.geraErro(`Houve um erro ao salvar os dados (0xed) - ${error}`)
-    }
-}
-
 $(document).on('keydown', function(e) {
     if (e.ctrlKey && e.which === 83) {
-        swal({
-                title: "Deseja salvar?",
-                text: "As atividades salvas podem ser carregadas posteriormente com o arquivo JSON gerado!",
-                icon: "info",
-                buttons: true,
-                dangerMode: false,
-            })
-            .then((salvar) => {
-                if (salvar) {
-                    salvarDados()
-                    swal("Pronto! O arquivo foi salvo com sucesso", {
-                        icon: "success",
-                    });
-                } else {
-                    return;
-                }
-            });
-        e.preventDefault();
-        return false;
+        appVue.save();
     }
 });
