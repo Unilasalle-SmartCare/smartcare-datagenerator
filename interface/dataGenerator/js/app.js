@@ -6,6 +6,8 @@ appVue = new Vue({
 		currentDate: null,
 		step: 30,
 		showStepDialog: false,
+		willConvert: false,
+		convertTargetStep: null,
 	},
 	mounted() {
 		this.initializeDate();
@@ -48,6 +50,16 @@ appVue = new Vue({
 					manager.getCurrent(this.date)?.statistics || new StatisticCalculator()
 				);
 			return new StatisticCalculator();
+		},
+		convertPath() {
+			if (this.willConvert) {
+				let factor = this.step / this.convertTargetStep;
+				manager.convert(factor);
+				this.showStepDialog = false;
+				this.step = 30;
+				this.convertTargetStep = null;
+				this.willConvert = false;
+			}
 		},
 	},
 	computed: {

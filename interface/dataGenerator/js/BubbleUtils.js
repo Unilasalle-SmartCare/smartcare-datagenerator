@@ -23,6 +23,10 @@ class BubbleUtils {
 		return [255, 0, 0];
 	}
 
+	static get CURSOR_BUBBLE_COLOR() {
+		return [0, 0, 0];
+	}
+
 	static get TEXT_OUTLINE_COLOR() {
 		return 0;
 	}

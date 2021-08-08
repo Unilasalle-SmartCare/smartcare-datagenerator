@@ -24,6 +24,7 @@ function setup() {
 function draw() {
 	background(img);
 	manager.show(appVue.date);
+	Cursor.show(mouseX, mouseY);
 }
 
 function onDoubleClick() {

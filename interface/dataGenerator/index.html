@@ -42,20 +42,58 @@
 				display: none;
 			}
 
-			.md-title {
+			.center-text {
 				text-align: center;
+			}
+
+			.primary-text {
+				color: #448aff;
+			}
+
+			.md-theme-orange-card {
+				background-color: #ff9800;
+			}
+			.noselect {
+				-webkit-touch-callout: none; /* iOS Safari */
+				-webkit-user-select: none; /* Safari */
+				-khtml-user-select: none; /* Konqueror HTML */
+				-moz-user-select: none; /* Old versions of Firefox */
+				-ms-user-select: none; /* Internet Explorer/Edge */
+				user-select: none; /* Non-prefixed version, currently
+			                               supported by Chrome, Edge, Opera and Firefox */
+			}
+			.vdatetime-input {
+				display: block;
+				width: 100%;
+				height: calc(1.5em + 0.75rem + 2px);
+				padding: 0.375rem 0.75rem;
+				font-size: 1rem;
+				font-weight: 400;
+				line-height: 1.5;
+				color: #495057;
+				background-color: #fff;
+				background-clip: padding-box;
+				border: 1px solid #ced4da;
+				border-radius: 0.25rem;
+				transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+			}
+
+			.vdatetime-calendar__month__weekday {
+				overflow: hidden;
+				padding-left: 1rem;
+				padding-right: 1rem;
 			}
 		</style>
 	</head>
 	<body>
 		<div id="appVue" v-cloak>
 			<md-toolbar class="md-primary">
-				<h3 class="md-title">SmartCare - Data Generator</h3>
+				<h3 class="md-title noselect">SmartCare - Data Generator</h3>
 				<div class="md-toolbar-section-end">
 					<md-menu md-size="auto" md-align-trigger>
 						<md-badge
 							md-position="bottom"
-							:md-content="getDatas().length"
+							:md-content="getStats().totalPaths"
 							md-menu-trigger
 						>
 							<md-button class="md-icon-button">
@@ -106,7 +144,12 @@
 					<div class="md-layout-item" for="vertical">
 						<md-field>
 							<label>Interval of Analysis</label>
-							<md-input v-model="step" type="number"></md-input>
+							<md-select v-model="step" md-dense>
+								<md-option></md-option>
+								<md-option value="15">15</md-option>
+								<md-option value="30">30</md-option>
+								<md-option value="60">60</md-option>
+							</md-select>
 							<span class="md-suffix">minutes</span>
 						</md-field>
 					</div>
@@ -125,247 +168,280 @@
 				</div>
 			</div>
 			<div
-				class="md-layout md-gutter"
+				class="md-layout md-gutter md-alignment-center-center"
 				style="margin-top: 1rem; margin-left: 0.25rem; margin-right: 0.25rem"
 			>
-				<div class="md-layout-item md-size-50">
-					<div class="md-layout-item">
+				<div class="md-layout-item md-size-50 v-center">
+					<div>
 						<div id="canvaswrapper"></div>
 					</div>
 				</div>
-				<div class="md-layout-item md-size-50">
-					<div class="md-layout md-gutter">
-						<div class="md-layout-item md-size-25" v-show="getStats()">
-							<div class="md-layout-item">
-								<md-card class="md-accent">
-									<md-card-header>
-										<md-card-header-text>
-											<transition name="bounce" mode="out-in">
-												<div class="md-title" :key="getStats().stressPoints">
-													{{getStats().stressPoints || 0}}
-												</div>
-											</transition>
-											<div class="md-subhead">Wandering</div>
-											<div class="md-subhead">Points</div>
-										</md-card-header-text>
-									</md-card-header>
-								</md-card>
-							</div>
-						</div>
-						<div class="md-layout-item md-size-25" v-show="getStats()">
-							<div class="md-layout-item">
-								<md-card class="md-primary">
-									<md-card-header>
-										<md-card-header-text>
-											<transition name="bounce" mode="out-in">
-												<div class="md-title" :key="getStats().totalPoints">
-													{{getStats().totalPoints || 0}}
-												</div>
-											</transition>
-											<div class="md-subhead">Total</div>
-											<div class="md-subhead">Points</div>
-										</md-card-header-text>
-									</md-card-header>
-								</md-card>
-							</div>
-						</div>
-						<div class="md-layout-item md-size-25" v-show="getStats()">
-							<div class="md-layout-item">
-								<md-card class="md-primary" md-theme="orange-card">
-									<md-card-header>
-										<md-card-header-text>
-											<transition name="bounce" mode="out-in">
-												<div class="md-title" :key="getStats().normalPoints">
-													{{getStats().normalPoints || 0}}
-												</div>
-											</transition>
-											<div class="md-subhead">Normal activity</div>
-											<div class="md-subhead">Points</div>
-										</md-card-header-text>
-									</md-card-header>
-								</md-card>
-							</div>
-						</div>
-					</div>
-					<div class="md-layout md-gutter">
-						<div class="md-layout-item md-size-25" v-show="getStats()">
-							<div class="md-layout-item">
-								<md-card class="md-accent">
-									<md-card-header>
-										<md-card-header-text>
-											<transition name="bounce" mode="out-in">
-												<div class="md-title" :key="getStats().minPoints">
-													<span
-														v-if="getStats().minPoints != Number.MAX_SAFE_INTEGER"
-														>{{getStats().minPoints || 0}}</span
-													><span v-else>0</span>
-												</div>
-											</transition>
-											<div class="md-subhead">Minimum Points</div>
-											<div class="md-subhead">Per date</div>
-										</md-card-header-text>
-									</md-card-header>
-								</md-card>
-							</div>
-						</div>
-						<div class="md-layout-item md-size-25" v-show="getStats()">
-							<div class="md-layout-item">
-								<md-card class="md-primary">
-									<md-card-header>
-										<md-card-header-text>
-											<transition name="bounce" mode="out-in">
-												<div class="md-title" :key="getStats().totalPoints">
-													{{getStats().averagePoints || 0}}
-												</div>
-											</transition>
-											<div class="md-subhead">Average Points</div>
-											<div class="md-subhead">Per date</div>
-										</md-card-header-text>
-									</md-card-header>
-								</md-card>
-							</div>
-						</div>
-						<div class="md-layout-item md-size-25" v-show="getStats()">
-							<div class="md-layout-item">
-								<md-card class="md-primary" md-theme="orange-card">
-									<md-card-header>
-										<md-card-header-text>
-											<transition name="bounce" mode="out-in">
-												<div class="md-title" :key="getStats().normalPoints">
-													<span
-														v-if="getStats().maxPoints != Number.MIN_SAFE_INTEGER"
+				<div class="md-layout-item md-size-50 v-center">
+					<div>
+						<p class="md-title noselect">
+							<i class="md-icon md-icon-font md-size-2x md-theme-default"
+								>show_chart</i
+							>
+							Global Statistics
+						</p>
+						<div class="md-layout md-gutter">
+							<div class="md-layout-item md-size-25" v-show="getStats()">
+								<div class="md-layout-item">
+									<md-card class="md-accent">
+										<md-card-header>
+											<md-card-header-text>
+												<transition name="bounce" mode="out-in">
+													<div
+														class="md-title center-text"
+														:key="getStats().stressPoints"
 													>
-														{{getStats().maxPoints || 0}} </span
-													><span v-else>0</span>
-												</div>
-											</transition>
-											<div class="md-subhead">Maximum Points</div>
-											<div class="md-subhead">Per date</div>
-										</md-card-header-text>
-									</md-card-header>
-								</md-card>
+														{{getStats().stressPoints || 0}}
+													</div>
+												</transition>
+												<div class="md-subhead">Wandering</div>
+												<div class="md-subhead">Points</div>
+											</md-card-header-text>
+										</md-card-header>
+									</md-card>
+								</div>
+							</div>
+							<div class="md-layout-item md-size-25" v-show="getStats()">
+								<div class="md-layout-item">
+									<md-card class="md-primary">
+										<md-card-header>
+											<md-card-header-text>
+												<transition name="bounce" mode="out-in">
+													<div
+														class="md-title center-text"
+														:key="getStats().totalPoints"
+													>
+														{{getStats().totalPoints || 0}}
+													</div>
+												</transition>
+												<div class="md-subhead">Total</div>
+												<div class="md-subhead">Points</div>
+											</md-card-header-text>
+										</md-card-header>
+									</md-card>
+								</div>
+							</div>
+							<div class="md-layout-item md-size-25" v-show="getStats()">
+								<div class="md-layout-item">
+									<md-card class="md-primary" md-theme="orange-card">
+										<md-card-header>
+											<md-card-header-text>
+												<transition name="bounce" mode="out-in">
+													<div
+														class="md-title center-text"
+														:key="getStats().normalPoints"
+													>
+														{{getStats().normalPoints || 0}}
+													</div>
+												</transition>
+												<div class="md-subhead">Normal activity</div>
+												<div class="md-subhead">Points</div>
+											</md-card-header-text>
+										</md-card-header>
+									</md-card>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="md-layout md-gutter">
-						<div class="md-layout-item md-size-25" v-show="getStats()">
-							<div class="md-layout-item">
-								<md-card class="md-accent">
-									<md-card-header>
-										<md-card-header-text>
-											<transition name="bounce" mode="out-in">
-												<div
-													class="md-title"
-													:key="getStats().totalWanderPaths"
-												>
-													{{getStats().totalWanderPaths || 0}}
-												</div>
-											</transition>
-											<div class="md-subhead">Wandering</div>
-											<div class="md-subhead">Slices</div>
-										</md-card-header-text>
-									</md-card-header>
-								</md-card>
+						<div class="md-layout md-gutter">
+							<div class="md-layout-item md-size-25" v-show="getStats()">
+								<div class="md-layout-item">
+									<md-card class="md-accent">
+										<md-card-header>
+											<md-card-header-text>
+												<transition name="bounce" mode="out-in">
+													<div
+														class="md-title center-text"
+														:key="getStats().minPoints"
+													>
+														<span
+															v-if="getStats().minPoints != Number.MAX_SAFE_INTEGER"
+															>{{getStats().minPoints || 0}}</span
+														><span v-else>0</span>
+													</div>
+												</transition>
+												<div class="md-subhead">Minimum Points</div>
+												<div class="md-subhead">Per date</div>
+											</md-card-header-text>
+										</md-card-header>
+									</md-card>
+								</div>
+							</div>
+							<div class="md-layout-item md-size-25" v-show="getStats()">
+								<div class="md-layout-item">
+									<md-card class="md-primary">
+										<md-card-header>
+											<md-card-header-text>
+												<transition name="bounce" mode="out-in">
+													<div
+														class="md-title center-text"
+														:key="getStats().totalPoints"
+													>
+														{{parseFloat(getStats().averagePoints ||
+														0).toFixed(2)}}
+													</div>
+												</transition>
+												<div class="md-subhead">Average Points</div>
+												<div class="md-subhead">Per date</div>
+											</md-card-header-text>
+										</md-card-header>
+									</md-card>
+								</div>
+							</div>
+							<div class="md-layout-item md-size-25" v-show="getStats()">
+								<div class="md-layout-item">
+									<md-card class="md-primary" md-theme="orange-card">
+										<md-card-header>
+											<md-card-header-text>
+												<transition name="bounce" mode="out-in">
+													<div
+														class="md-title center-text"
+														:key="getStats().normalPoints"
+													>
+														<span
+															v-if="getStats().maxPoints != Number.MIN_SAFE_INTEGER"
+														>
+															{{getStats().maxPoints || 0}} </span
+														><span v-else>0</span>
+													</div>
+												</transition>
+												<div class="md-subhead">Maximum Points</div>
+												<div class="md-subhead">Per date</div>
+											</md-card-header-text>
+										</md-card-header>
+									</md-card>
+								</div>
 							</div>
 						</div>
-						<div class="md-layout-item md-size-25" v-show="getStats()">
-							<div class="md-layout-item">
-								<md-card class="md-primary">
-									<md-card-header>
-										<md-card-header-text>
-											<transition name="bounce" mode="out-in">
-												<div class="md-title" :key="getStats().totalPaths">
-													{{getStats().totalPaths || 0}}
-												</div>
-											</transition>
-											<div class="md-subhead">Total</div>
-											<div class="md-subhead">Slices</div>
-										</md-card-header-text>
-									</md-card-header>
-								</md-card>
+						<div class="md-layout md-gutter">
+							<div class="md-layout-item md-size-25" v-show="getStats()">
+								<div class="md-layout-item">
+									<md-card class="md-accent">
+										<md-card-header>
+											<md-card-header-text>
+												<transition name="bounce" mode="out-in">
+													<div
+														class="md-title center-text"
+														:key="getStats().totalWanderPaths"
+													>
+														{{getStats().totalWanderPaths || 0}}
+													</div>
+												</transition>
+												<div class="md-subhead">Wandering</div>
+												<div class="md-subhead">Slices</div>
+											</md-card-header-text>
+										</md-card-header>
+									</md-card>
+								</div>
+							</div>
+							<div class="md-layout-item md-size-25" v-show="getStats()">
+								<div class="md-layout-item">
+									<md-card class="md-primary">
+										<md-card-header>
+											<md-card-header-text>
+												<transition name="bounce" mode="out-in">
+													<div
+														class="md-title center-text"
+														:key="getStats().totalPaths"
+													>
+														{{getStats().totalPaths || 0}}
+													</div>
+												</transition>
+												<div class="md-subhead">Total</div>
+												<div class="md-subhead">Slices</div>
+											</md-card-header-text>
+										</md-card-header>
+									</md-card>
+								</div>
+							</div>
+							<div class="md-layout-item md-size-25" v-show="getStats()">
+								<div class="md-layout-item">
+									<md-card class="md-primary" md-theme="orange-card">
+										<md-card-header>
+											<md-card-header-text>
+												<transition name="bounce" mode="out-in">
+													<div
+														class="md-title center-text"
+														:key="getStats().totalNormalPaths"
+													>
+														{{getStats().totalNormalPaths || 0}}
+													</div>
+												</transition>
+												<div class="md-subhead">Normal Activity</div>
+												<div class="md-subhead">Slices</div>
+											</md-card-header-text>
+										</md-card-header>
+									</md-card>
+								</div>
 							</div>
 						</div>
-						<div class="md-layout-item md-size-25" v-show="getStats()">
-							<div class="md-layout-item">
-								<md-card class="md-primary" md-theme="orange-card">
-									<md-card-header>
-										<md-card-header-text>
-											<transition name="bounce" mode="out-in">
-												<div
-													class="md-title"
-													:key="getStats().totalNormalPaths"
-												>
-													{{getStats().totalNormalPaths || 0}}
-												</div>
-											</transition>
-											<div class="md-subhead">Normal Activity</div>
-											<div class="md-subhead">Slices</div>
-										</md-card-header-text>
-									</md-card-header>
-								</md-card>
+						<p class="md-title">
+							<span class="primary-text">{{date}} </span>
+							Statistics
+						</p>
+						<div class="md-layout md-gutter">
+							<div class="md-layout-item md-size-25" v-show="getStats()">
+								<div class="md-layout-item">
+									<md-card class="md-accent">
+										<md-card-header>
+											<md-card-header-text>
+												<transition name="bounce" mode="out-in">
+													<div
+														class="md-title center-text"
+														:key="getCurrentStats().stressPoints"
+													>
+														{{getCurrentStats().stressPoints || 0}}
+													</div>
+												</transition>
+												<div class="md-subhead">Wandering</div>
+												<div class="md-subhead">Points</div>
+											</md-card-header-text>
+										</md-card-header>
+									</md-card>
+								</div>
 							</div>
-						</div>
-					</div>
-					<hr />
-					<div class="md-layout md-gutter">
-						<div class="md-layout-item md-size-25" v-show="getStats()">
-							<div class="md-layout-item">
-								<md-card class="md-accent">
-									<md-card-header>
-										<md-card-header-text>
-											<transition name="bounce" mode="out-in">
-												<div
-													class="md-title"
-													:key="getCurrentStats().stressPoints"
-												>
-													{{getCurrentStats().stressPoints || 0}}
-												</div>
-											</transition>
-											<div class="md-subhead">Wandering</div>
-											<div class="md-subhead">Points</div>
-										</md-card-header-text>
-									</md-card-header>
-								</md-card>
+							<div class="md-layout-item md-size-25" v-show="getStats()">
+								<div class="md-layout-item">
+									<md-card class="md-primary">
+										<md-card-header>
+											<md-card-header-text>
+												<transition name="bounce" mode="out-in">
+													<div
+														class="md-title center-text"
+														:key="getCurrentStats().totalPoints"
+													>
+														{{getCurrentStats().totalPoints || 0}}
+													</div>
+												</transition>
+												<div class="md-subhead">Total</div>
+												<div class="md-subhead">Points</div>
+											</md-card-header-text>
+										</md-card-header>
+									</md-card>
+								</div>
 							</div>
-						</div>
-						<div class="md-layout-item md-size-25" v-show="getStats()">
-							<div class="md-layout-item">
-								<md-card class="md-primary">
-									<md-card-header>
-										<md-card-header-text>
-											<transition name="bounce" mode="out-in">
-												<div
-													class="md-title"
-													:key="getCurrentStats().totalPoints"
-												>
-													{{getCurrentStats().totalPoints || 0}}
-												</div>
-											</transition>
-											<div class="md-subhead">Total</div>
-											<div class="md-subhead">Points</div>
-										</md-card-header-text>
-									</md-card-header>
-								</md-card>
-							</div>
-						</div>
-						<div class="md-layout-item md-size-25" v-show="getStats()">
-							<div class="md-layout-item">
-								<md-card class="md-primary" md-theme="orange-card">
-									<md-card-header>
-										<md-card-header-text>
-											<transition name="bounce" mode="out-in">
-												<div
-													class="md-title"
-													:key="getCurrentStats().normalPoints"
-												>
-													{{getCurrentStats().normalPoints || 0}}
-												</div>
-											</transition>
-											<div class="md-subhead">Normal Activity</div>
-											<div class="md-subhead">Points</div>
-										</md-card-header-text>
-									</md-card-header>
-								</md-card>
+							<div class="md-layout-item md-size-25" v-show="getStats()">
+								<div class="md-layout-item">
+									<md-card class="md-primary" md-theme="orange-card">
+										<md-card-header>
+											<md-card-header-text>
+												<transition name="bounce" mode="out-in">
+													<div
+														class="md-title center-text"
+														:key="getCurrentStats().normalPoints"
+													>
+														{{getCurrentStats().normalPoints || 0}}
+													</div>
+												</transition>
+												<div class="md-subhead">Normal Activity</div>
+												<div class="md-subhead">Points</div>
+											</md-card-header-text>
+										</md-card-header>
+									</md-card>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -377,6 +453,10 @@
 					<md-icon>tune</md-icon>
 				</md-speed-dial-target>
 				<md-speed-dial-content>
+					<md-button class="md-icon-button" @click="showStepDialog = true">
+						<md-icon>sync_alt</md-icon>
+						<md-tooltip md-direction="right">Convert path slices</md-tooltip>
+					</md-button>
 					<md-button class="md-icon-button" @click="loadBackground">
 						<md-icon>perm_media</md-icon>
 						<md-tooltip md-direction="right"
@@ -406,11 +486,40 @@
 						<p style="display: block">
 							What is the interval of Analysis of the dataset you loaded?
 						</p>
-						<md-input v-model="step" type="number"></md-input>
+						<md-field>
+							<label>Interval of Analysis</label>
+							<md-select v-model="step">
+								<md-option></md-option>
+								<md-option value="15">15</md-option>
+								<md-option value="30">30</md-option>
+								<md-option value="60">60</md-option>
+							</md-select>
+							<span class="md-suffix">minutes</span>
+						</md-field>
+						<div v-show="step==60">
+							<md-checkbox v-model="willConvert" class="md-primary"
+								>Convert</md-checkbox
+							>
+							<md-field v-show="willConvert">
+								<md-select v-model="convertTargetStep">
+									<md-option value="30">30</md-option>
+								</md-select>
+							</md-field>
+						</div>
 					</div>
 					<md-dialog-actions>
-						<md-button class="md-primary" @click="showStepDialog = false"
+						<md-button
+							v-if="!willConvert"
+							class="md-primary"
+							@click="showStepDialog = false"
 							>Confirm</md-button
+						>
+						<md-button
+							class="md-raised md-accent"
+							v-if="willConvert"
+							:disabled="convertTargetStep == null && getCurrentStats().totalPoints > 2"
+							@click="convertPath"
+							>Convert</md-button
 						>
 					</md-dialog-actions>
 				</md-dialog>
@@ -440,6 +549,7 @@
 		<script src="js/LinkedList.js"></script>
 		<script src="js/Bubble.js"></script>
 		<script src="js/BubbleUtils.js"></script>
+		<script src="js/Cursor.js"></script>
 
 		<script src="js/Path.js"></script>
 		<script src="js/PathManager.js"></script>

@@ -25,6 +25,39 @@ class Path {
 		return BubbleUtils.NORMAL_COLOR;
 	}
 
+	divideSelf() {
+		try {
+			// Divides self by two and returns the linked list of the removed half
+			let currentNode = this.bubbleList.head;
+			if (this.statistics.totalPoints < 2) {
+				return null;
+			}
+
+			let totalPoints = this.statistics.totalPoints;
+
+			let middleFlag = Math.floor(totalPoints / 2);
+			if (totalPoints % 2 == 0) {
+				middleFlag--;
+			}
+			for (let index = 0; index < middleFlag; index++) {
+				let nextNode = currentNode.next;
+				currentNode = nextNode;
+			}
+
+			let half = currentNode.next;
+			let halfList = new LinkedList(half);
+
+			// Decouples from the linked list the half removed
+			currentNode.next = null;
+
+			this.update(false);
+
+			return halfList;
+		} catch (error) {
+			console.log("ERROR", this.statistics.totalPoints);
+		}
+	}
+
 	show() {
 		let currentNode = this.bubbleList.head;
 		let i = 1;
@@ -85,8 +118,8 @@ class Path {
 		return 1;
 	}
 
-	update() {
-		this.wandering = appVue.wandering;
+	update(wanderingUpdate = true) {
+		if (wanderingUpdate) this.wandering = appVue.wandering;
 		let currentNode = this.bubbleList.head;
 		this.statistics = new StatisticCalculator();
 		while (currentNode) {
