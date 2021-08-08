@@ -51,7 +51,7 @@
 			}
 
 			.md-theme-orange-card {
-				background-color: #ff9800;
+				background-color: #ff9800 !important;
 			}
 			.noselect {
 				-webkit-touch-callout: none; /* iOS Safari */
@@ -104,7 +104,7 @@
 							<md-list>
 								<md-subheader>Current Date</md-subheader>
 								<md-list-item>
-									<md-chip class="md-accent">{{date}}</md-chip>
+									<md-chip class="md-theme-orange-card">{{date}}</md-chip>
 								</md-list-item>
 								<md-divider v-show="getDatas().length"></md-divider>
 								<md-subheader v-show="getDatas().length"
@@ -113,13 +113,24 @@
 
 								<md-list-item v-for="d in getDatas()">
 									<md-chip
+										v-show="!manager?.paths[d].wandering"
 										v-if="d"
 										class="md-primary"
 										@click="currentDate=formattedDateToISO(d)"
 										md-clickable
-										><span v-show="">🙂 - </span
-										><span v-show="">😕 - </span>{{d}}</md-chip
 									>
+										<span>🙂 - </span>{{d}}</md-chip
+									>
+
+									<md-chip
+										v-show="manager?.paths[d].wandering"
+										v-if="d"
+										class="md-accent"
+										@click="currentDate=formattedDateToISO(d)"
+										md-clickable
+									>
+										<span>😕 - </span>{{d}}
+									</md-chip>
 								</md-list-item>
 							</md-list>
 						</md-menu-content>
