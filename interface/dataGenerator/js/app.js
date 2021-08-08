@@ -5,12 +5,44 @@ appVue = new Vue({
 		wandering: false,
 		currentDate: null,
 		step: 30,
-		teste: 0,
+		showStepDialog: false,
 	},
 	mounted() {
-		this.currentDate = moment();
+		this.initializeDate();
 	},
-	methods: {},
+	methods: {
+		loadPath() {
+			$("#fileInputJson").click();
+		},
+		loadBackground() {
+			$("#fileInputBg").click();
+		},
+		save() {
+			if (typeof manager !== "undefined") manager.save();
+		},
+		updatePath() {
+			if (typeof manager !== "undefined") manager.update(this.date);
+		},
+		initializeDate() {
+			let now = luxon.DateTime.local();
+			now = now.set({
+				minutes: 0,
+			});
+			this.currentDate = now.toISO();
+		},
+		getDatas() {
+			if (typeof manager !== "undefined")
+				return Object.keys(manager.paths).filter((e) => e !== this.date);
+			return [];
+		},
+		formattedDateToISO(date) {
+			return moment(date, "DD/MM/YYYY HH:mm").toISOString();
+		},
+		getStats() {
+			if (typeof manager !== "undefined") return manager.statistics;
+			return new GlobalStatisticCalculator();
+		},
+	},
 	computed: {
 		date() {
 			return moment(this.currentDate).format("DD/MM/YYYY HH:mm");

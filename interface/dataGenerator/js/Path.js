@@ -2,6 +2,7 @@ class Path {
 	constructor() {
 		this.bubbleList = new LinkedList();
 		this.wandering = appVue.wandering;
+		this.statistics = new StatisticCalculator();
 	}
 
 	isLastNode(node) {
@@ -27,14 +28,17 @@ class Path {
 	show() {
 		let currentNode = this.bubbleList.head;
 		let i = 1;
+		//this.statistics = new StatisticCalculator();
 		while (currentNode) {
 			let nextNode = currentNode.next;
 			let currentBubble = currentNode.data;
 			let nextBubble = nextNode || null;
 			if (nextBubble) {
 				nextBubble = nextBubble.data;
-				BubbleUtils.link(currentBubble, nextBubble);
+				BubbleUtils.link(currentBubble, nextBubble, this.wandering);
 			}
+
+			//this.statistics.calculate(this.wandering);
 
 			let bubbleColor = this.getBubbleColor(currentNode, i);
 			currentBubble.show(i.toString(), bubbleColor);
@@ -56,23 +60,45 @@ class Path {
 	}
 
 	append(bubble) {
+		debugger;
 		let newNode = new ListNode(bubble);
 
 		// If list is empty, insert in the head
 		if (!this.bubbleList.head) {
 			this.bubbleList.head = newNode;
+			this.statistics = new StatisticCalculator();
+			this.statistics.calculate(this.wandering);
 			return 1;
 		}
 
 		let currentNode = this.bubbleList.head;
-
-		while (currentNode.next) {
+		while (currentNode) {
 			// While not at the end of the list, iterate through it
+			if (!currentNode.next) {
+				currentNode.next = newNode;
+				this.statistics.calculate(this.wandering);
+
+				break;
+			}
 			currentNode = currentNode.next;
 		}
 
-		currentNode.next = newNode;
-
 		return 1;
+	}
+
+	update() {
+		this.wandering = appVue.wandering;
+		let currentNode = this.bubbleList.head;
+		debugger;
+		this.statistics = new StatisticCalculator();
+		while (currentNode) {
+			this.statistics.calculate(this.wandering);
+
+			// While not at the end of the list, iterate through it
+			if (!currentNode.next) {
+				break;
+			}
+			currentNode = currentNode.next;
+		}
 	}
 }
