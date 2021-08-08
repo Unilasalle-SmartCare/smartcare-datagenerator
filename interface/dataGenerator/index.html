@@ -113,8 +113,7 @@
 
 								<md-list-item v-for="d in getDatas()">
 									<md-chip
-										v-show="!manager?.paths[d].wandering"
-										v-if="d"
+										v-if="!manager?.paths[d].wandering"
 										class="md-primary"
 										@click="currentDate=formattedDateToISO(d)"
 										md-clickable
@@ -123,8 +122,7 @@
 									>
 
 									<md-chip
-										v-show="manager?.paths[d].wandering"
-										v-if="d"
+										v-else
 										class="md-accent"
 										@click="currentDate=formattedDateToISO(d)"
 										md-clickable
