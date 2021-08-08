@@ -42,6 +42,13 @@ appVue = new Vue({
 			if (typeof manager !== "undefined") return manager.statistics;
 			return new GlobalStatisticCalculator();
 		},
+		getCurrentStats() {
+			if (typeof manager !== "undefined")
+				return (
+					manager.getCurrent(this.date)?.statistics || new StatisticCalculator()
+				);
+			return new StatisticCalculator();
+		},
 	},
 	computed: {
 		date() {

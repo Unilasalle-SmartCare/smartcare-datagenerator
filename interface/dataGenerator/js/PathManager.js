@@ -12,6 +12,10 @@ class PathManager {
 		appVue.$forceUpdate();
 	}
 
+	getCurrent(date) {
+		return this.paths[date];
+	}
+
 	show(date) {
 		let currentPath = this.paths[date];
 		if (currentPath) {

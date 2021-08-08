@@ -60,7 +60,6 @@ class Path {
 	}
 
 	append(bubble) {
-		debugger;
 		let newNode = new ListNode(bubble);
 
 		// If list is empty, insert in the head
@@ -89,7 +88,6 @@ class Path {
 	update() {
 		this.wandering = appVue.wandering;
 		let currentNode = this.bubbleList.head;
-		debugger;
 		this.statistics = new StatisticCalculator();
 		while (currentNode) {
 			this.statistics.calculate(this.wandering);
