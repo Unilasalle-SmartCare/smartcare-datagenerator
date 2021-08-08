@@ -185,7 +185,10 @@
 						<div id="canvaswrapper"></div>
 					</div>
 				</div>
-				<div class="md-layout-item md-size-50 v-center">
+				<div
+					class="md-layout-item md-size-50 v-center"
+					v-show="getStats().totalPoints"
+				>
 					<div>
 						<p class="md-title noselect">
 							<i class="md-icon md-icon-font md-size-2x md-theme-default"
@@ -453,6 +456,19 @@
 								</div>
 							</div>
 						</div>
+					</div>
+				</div>
+				<div
+					class="md-layout-item md-size-50 v-center"
+					v-show="!getStats().totalPoints"
+				>
+					<div class="md-layout md-gutter">
+						<md-empty-state
+							md-icon="analytics"
+							md-label="No data available"
+							md-description="We do not have data available to generate the statistics. Double click the floor plan and start tracing the paths."
+						>
+						</md-empty-state>
 					</div>
 				</div>
 			</div>
