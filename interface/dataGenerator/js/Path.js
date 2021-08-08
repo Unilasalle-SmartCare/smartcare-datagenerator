@@ -30,7 +30,7 @@ class Path {
 			// Divides self by two and returns the linked list of the removed half
 			let currentNode = this.bubbleList.head;
 			if (this.statistics.totalPoints < 2) {
-				return null;
+				return this.bubbleList;
 			}
 
 			let totalPoints = this.statistics.totalPoints;
