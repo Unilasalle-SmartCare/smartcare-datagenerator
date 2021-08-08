@@ -40,10 +40,13 @@ class PathManager {
 			return;
 		}
 		let paths = [];
-		for (const [date, path] of Object.entries(this.paths)) {
-			let currentPath = path.toArray(date);
-			paths = paths.concat(currentPath);
-		}
+		Object.keys(this.paths)
+			.sort()
+			.forEach(function (date, n) {
+				let path = this.paths[date];
+				let currentPath = path.toArray(date);
+				paths = paths.concat(currentPath);
+			});
 		return paths;
 	}
 

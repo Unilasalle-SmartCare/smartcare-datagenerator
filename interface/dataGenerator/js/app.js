@@ -34,7 +34,9 @@ appVue = new Vue({
 		},
 		getDatas() {
 			if (typeof manager !== "undefined")
-				return Object.keys(manager.paths).filter((e) => e !== this.date);
+				return Object.keys(manager.paths)
+					.sort()
+					.filter((e) => e !== this.date);
 			return [];
 		},
 		formattedDateToISO(date) {
