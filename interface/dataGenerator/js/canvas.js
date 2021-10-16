@@ -1,4 +1,5 @@
 let manager = new PathManager();
+let forcedDate = null;
 
 function createUploadInputs() {
 	inputJson = createFileInput(load);
@@ -22,8 +23,14 @@ function setup() {
 }
 
 function draw() {
-	background(img);
-	manager.show(appVue.date);
+	if (!forcedDate) {
+		background(img);
+
+		manager.show(appVue.date);
+	} else {
+		background(0);
+		manager.show(forcedDate);
+	}
 	Cursor.show(mouseX, mouseY);
 }
 

@@ -7,6 +7,10 @@ class StorageManager {
 		loadJSON(url);
 	}
 
+	static saveImage(name) {
+		save(name + ".jpg");
+	}
+
 	static load(file) {
 		let newManager = new PathManager();
 		let paths = this.handleJSON(file);

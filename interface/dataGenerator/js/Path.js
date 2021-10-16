@@ -73,8 +73,11 @@ class Path {
 
 			//this.statistics.calculate(this.wandering);
 
-			let bubbleColor = this.getBubbleColor(currentNode, i);
-			currentBubble.show(i.toString(), bubbleColor);
+			if (!forcedDate) {
+				let bubbleColor = this.getBubbleColor(currentNode, i);
+				currentBubble.show(i.toString(), bubbleColor);
+			}
+
 			currentNode = nextNode;
 			i++;
 		}

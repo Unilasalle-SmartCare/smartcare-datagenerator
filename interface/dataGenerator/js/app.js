@@ -19,8 +19,12 @@ appVue = new Vue({
 		loadBackground() {
 			$("#fileInputBg").click();
 		},
+
 		save() {
 			if (typeof manager !== "undefined") manager.save();
+		},
+		screenshotPath() {
+			if (typeof manager !== "undefined") manager.saveImages();
 		},
 		updatePath() {
 			if (typeof manager !== "undefined") manager.update(this.date);

@@ -46,7 +46,7 @@ class PathManager {
 				let path = this.paths[date];
 				let currentPath = path.toArray(date);
 				paths = paths.concat(currentPath);
-			});
+			}, this);
 		return paths;
 	}
 
@@ -57,6 +57,24 @@ class PathManager {
 
 	save() {
 		StorageManager.save(this.toArray());
+	}
+
+	sleep(time) {
+		return new Promise((resolve) => {
+			setTimeout(resolve, time);
+		});
+	}
+
+	async saveImages() {
+		for (let date in this.paths) {
+			await this.sleep(3000);
+			forcedDate = date;
+			console.log(forcedDate);
+			await this.sleep(1000);
+			StorageManager.saveImage(date);
+			console.log(date);
+		}
+		forcedDate = null;
 	}
 
 	incrementDate(currentDate, minuteStep) {
