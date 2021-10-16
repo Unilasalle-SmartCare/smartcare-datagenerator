@@ -54,7 +54,8 @@ class BubbleUtils {
 		if (isWandering) {
 			stroke(this.LINK_WANDER_COLOR);
 		}
-		if (forcedDate) stroke(255, 255, 255);
+		if (forcedDate){ stroke(255, 255, 255);
+			strokeWeight(1)}
 		line(bubble1.x, bubble1.y, bubble2.x, bubble2.y);
 	}
 }
